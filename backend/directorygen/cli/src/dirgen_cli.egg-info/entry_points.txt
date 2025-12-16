@@ -1,0 +1,2 @@
+[console_scripts]
+dirgen_cli = dirgen_cli.cli:main

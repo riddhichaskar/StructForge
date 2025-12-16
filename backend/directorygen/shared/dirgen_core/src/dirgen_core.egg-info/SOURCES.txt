@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+src/dirgen_core/__init__.py
+src/dirgen_core/builder.py
+src/dirgen_core/manifest.py
+src/dirgen_core/models.py
+src/dirgen_core/parser.py
+src/dirgen_core/previewer.py
+src/dirgen_core/templates.py
+src/dirgen_core/validator.py
+src/dirgen_core/zip_utils.py
+src/dirgen_core.egg-info/PKG-INFO
+src/dirgen_core.egg-info/SOURCES.txt
+src/dirgen_core.egg-info/dependency_links.txt
+src/dirgen_core.egg-info/top_level.txt

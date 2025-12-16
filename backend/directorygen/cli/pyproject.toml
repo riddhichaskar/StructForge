@@ -1,0 +1,21 @@
+[project]
+name = "dirgen_cli"
+version = "0.1.0"
+description = "CLI for DirectoryGen"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name="Your Name", email="you@example.com" }
+]
+license = { text = "MIT" }
+dependencies = ["dirgen_core"]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+dirgen_cli = "dirgen_cli.cli:main"

@@ -1,0 +1,13 @@
+README.md
+pyproject.toml
+src/dirgen_cli/__init__.py
+src/dirgen_cli/__main__.py
+src/dirgen_cli/cli.py
+src/dirgen_cli/commands.py
+src/dirgen_cli/config.py
+src/dirgen_cli.egg-info/PKG-INFO
+src/dirgen_cli.egg-info/SOURCES.txt
+src/dirgen_cli.egg-info/dependency_links.txt
+src/dirgen_cli.egg-info/entry_points.txt
+src/dirgen_cli.egg-info/requires.txt
+src/dirgen_cli.egg-info/top_level.txt

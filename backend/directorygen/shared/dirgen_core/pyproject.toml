@@ -1,0 +1,18 @@
+[project]
+name = "dirgen_core"
+version = "0.1.0"
+description = "Core library for DirectoryGen: parse, validate, build, and zip directory structures"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name="Your Name", email="you@example.com" }
+]
+license = { text = "MIT" }
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

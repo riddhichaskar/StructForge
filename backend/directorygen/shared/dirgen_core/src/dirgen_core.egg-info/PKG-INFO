@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: dirgen_core
+Version: 0.1.0
+Summary: Core library for DirectoryGen: parse, validate, build, and zip directory structures
+Author-email: Your Name <you@example.com>
+License: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
