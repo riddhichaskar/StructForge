@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@source "../src";
+@variant dark (&:where(.dark, .dark *));
 
 @theme {
   /* 1. Define Colors */

@@ -19,7 +19,7 @@ function ElegantShape({
     rotate?: number;
     gradient?: string;
 }) {
-    // Cinematic Drift Logic (Preserved)
+    // Cinematic Drift Logic
     const xOffset = (Math.random() - 0.5) * 400;
     const yOffset = (Math.random() - 0.5) * 400;
     const duration = 20 + Math.random() * 10;
@@ -52,7 +52,11 @@ function ElegantShape({
                     "absolute inset-0 rounded-full",
                     "bg-gradient-to-r to-transparent",
                     gradient,
-                    "backdrop-blur-[2px] border-2 border-white/[0.15] dark:border-white/[0.15] border-black/[0.05]",
+                    // UPDATED BORDERS:
+                    // border-black/[0.15] ensures visibility in light mode
+                    // dark:border-white/[0.15] keeps it subtle in dark mode
+                    "backdrop-blur-[2px] border-2 border-black/[0.15] dark:border-white/[0.15]", 
+                    // UPDATED SHADOWS:
                     "shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)]",
                     "after:absolute after:inset-0 after:rounded-full",
                     "after:bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.05),transparent_70%)] dark:after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]"
@@ -62,7 +66,6 @@ function ElegantShape({
     );
 }
 
-// NEW: Typewriter Effect Component
 function Typewriter({ text, className }: { text: string; className?: string }) {
     const sentenceVariants = {
         hidden: { opacity: 1 },
@@ -70,13 +73,13 @@ function Typewriter({ text, className }: { text: string; className?: string }) {
             opacity: 1,
             transition: {
                 delay: 0.5,
-                staggerChildren: 0.08, // Adjust speed here (lower is faster)
+                staggerChildren: 0.08,
             },
         },
     };
 
     const letterVariants = {
-        hidden: { opacity: 0, y: 0 }, // Simple fade in, no jump
+        hidden: { opacity: 0, y: 0 },
         visible: { opacity: 1, y: 0 },
     };
 
@@ -124,31 +127,90 @@ function HeroGeometric({
     return (
         <div className="relative min-h-screen w-full bg-background overflow-x-hidden transition-colors duration-300">
             
-            {/* NEW: Noise Overlay */}
-            <div 
-                className="fixed inset-0 z-[50] pointer-events-none opacity-[0.03] dark:opacity-[0.05]"
-                style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E")`,
-                    backgroundRepeat: 'repeat',
-                }}
-            />
+            {/* NOISE REMOVED HERE */}
 
             {/* BACKGROUND LAYER */}
             <div className="absolute inset-0 h-full w-full z-0 pointer-events-none overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
                 
-                {/* Shapes */}
-                <ElegantShape delay={0.3} width={600} height={140} rotate={12} gradient="from-indigo-500/[0.15]" className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]" />
-                <ElegantShape delay={0.5} width={500} height={120} rotate={-15} gradient="from-rose-500/[0.15]" className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]" />
-                <ElegantShape delay={0.4} width={300} height={80} rotate={-8} gradient="from-violet-500/[0.15]" className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]" />
-                <ElegantShape delay={0.6} width={200} height={60} rotate={20} gradient="from-amber-500/[0.15]" className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]" />
-                <ElegantShape delay={0.7} width={150} height={40} rotate={-25} gradient="from-cyan-500/[0.15]" className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]" />
+                {/* UPDATED SHAPES:
+                   Added 'dark:' prefix to keep dark mode subtle.
+                   Increased base opacity to [0.3] for Light Mode visibility.
+                */}
+                <ElegantShape
+                    delay={0.3}
+                    width={600}
+                    height={140}
+                    rotate={12}
+                    gradient="from-indigo-500/[0.3] dark:from-indigo-500/[0.15]"
+                    className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
+                />
+                <ElegantShape
+                    delay={0.5}
+                    width={500}
+                    height={120}
+                    rotate={-15}
+                    gradient="from-rose-500/[0.3] dark:from-rose-500/[0.15]"
+                    className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
+                />
+                <ElegantShape
+                    delay={0.4}
+                    width={300}
+                    height={80}
+                    rotate={-8}
+                    gradient="from-violet-500/[0.3] dark:from-violet-500/[0.15]"
+                    className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
+                />
+                <ElegantShape
+                    delay={0.6}
+                    width={200}
+                    height={60}
+                    rotate={20}
+                    gradient="from-amber-500/[0.3] dark:from-amber-500/[0.15]"
+                    className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
+                />
+                <ElegantShape
+                    delay={0.7}
+                    width={150}
+                    height={40}
+                    rotate={-25}
+                    gradient="from-cyan-500/[0.3] dark:from-cyan-500/[0.15]"
+                    className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
+                />
                 
                 {/* Extended Shapes */}
-                <ElegantShape delay={0.5} width={600} height={100} rotate={15} gradient="from-emerald-500/[0.15]" className="right-[-10%] top-[115%] opacity-80" />
-                <ElegantShape delay={0.6} width={400} height={80} rotate={-10} gradient="from-pink-500/[0.15]" className="left-[5%] top-[135%]" />
-                <ElegantShape delay={0.7} width={500} height={120} rotate={5} gradient="from-blue-500/[0.15]" className="right-[15%] top-[160%]" />
-                <ElegantShape delay={0.8} width={250} height={60} rotate={-20} gradient="from-orange-500/[0.15]" className="left-[-5%] top-[175%]" />
+                <ElegantShape
+                    delay={0.5}
+                    width={600}
+                    height={100}
+                    rotate={15}
+                    gradient="from-emerald-500/[0.3] dark:from-emerald-500/[0.15]"
+                    className="right-[-10%] top-[115%] opacity-80"
+                />
+                <ElegantShape
+                    delay={0.6}
+                    width={400}
+                    height={80}
+                    rotate={-10}
+                    gradient="from-pink-500/[0.3] dark:from-pink-500/[0.15]"
+                    className="left-[5%] top-[135%]"
+                />
+                <ElegantShape
+                    delay={0.7}
+                    width={500}
+                    height={120}
+                    rotate={5}
+                    gradient="from-blue-500/[0.3] dark:from-blue-500/[0.15]"
+                    className="right-[15%] top-[160%]"
+                />
+                <ElegantShape
+                    delay={0.8}
+                    width={250}
+                    height={60}
+                    rotate={-20}
+                    gradient="from-orange-500/[0.3] dark:from-orange-500/[0.15]"
+                    className="left-[-5%] top-[175%]"
+                />
             </div>
             
             <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/80 pointer-events-none z-0" />
@@ -158,13 +220,11 @@ function HeroGeometric({
                 <div className="min-h-screen flex flex-col items-center justify-center container mx-auto px-4 md:px-6">
                     <div className="max-w-3xl mx-auto text-center">
                         <div className="mb-6 md:mb-8">
-                            {/* NEW: Typewriter for Title 1 */}
                             <Typewriter 
                                 text={title1 || ""}
                                 className="text-4xl sm:text-6xl md:text-8xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/80 mb-2"
                             />
                             
-                            {/* Standard Fade for Title 2 */}
                             <motion.h1
                                 custom={1}
                                 variants={fadeUpVariants}
