@@ -1,162 +1,121 @@
-"use client";
+import { useState } from 'react';
+import { ReactFlowProvider } from '@xyflow/react';
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+// --- COMPONENTS ---
+import { ViewToggle } from '../components/ui/ViewToggle';
+import { UploadBlock } from '@/components/features/converter/components/UploadBlock';
+import { MindMap } from '@/components/features/visualization/components/MindMap';
+import { FileExplorer } from '@/components/features/visualization/components/FileExplorer'; 
+import { AuroraBackground } from '@/components/background/AuroraBackground';
 
-// --- CORE IMPORTS ---
-import { api, type PreviewResponse } from "@/lib/api";
-import { buildTree, type UITreeNode } from "@/lib/tree-utils";
-import { playSuccessSound } from "@/lib/sound-utils";
+// --- SERVICES & TYPES ---
+import { importZip } from '@/components/features/converter/services/api';
+import type { FileNode } from '@/types/structure';
 
-// --- UI COMPONENTS ---
-import { AuroraBackground } from "@/components/background/AuroraBackground";
-import { ErrorToast } from "@/components/ui/ErrorToast";
-import { SystemStatus } from "@/components/ui/system-status";
-
-// --- FEATURE COMPONENTS ---
-import { ZipUploadZone } from "@/components/features/zip/ZipUploadZone";
-import { StructurePreview } from "@/components/features/zip/StructurePreview";
-import { TreeVisualizer } from "@/components/features/zip/TreeVisualizer";
-
-export default function ZipToDirectoryPage() {
-  // --- STATE ---
-  const [file, setFile] = useState<File | null>(null);
-  const [structureText, setStructureText] = useState("");
+const ZipToDirectoryPage = () => {
+  const [layoutMode, setLayoutMode] = useState<'vertical' | 'horizontal'>('vertical');
   
-  // Data
-  const [rootNode, setRootNode] = useState<UITreeNode | null>(null);
-  const [summary, setSummary] = useState<PreviewResponse["summary"] | null>(null);
-  
-  // UI Status
-  const [status, setStatus] = useState<"IDLE" | "UPLOADING" | "ANALYZING" | "READY">("IDLE");
-  const [isBackendOnline, setIsBackendOnline] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [fileData, setFileData] = useState<FileNode | null>(null); 
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [textContent, setTextContent] = useState<string>("");     
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  // --- HEALTH CHECK ---
-  useEffect(() => {
-    const checkHealth = async () => {
-      try {
-        const healthy = await api.checkHealth();
-        setIsBackendOnline(healthy);
-      } catch (e) { setIsBackendOnline(false); }
-    };
-    checkHealth();
-    const interval = setInterval(checkHealth, 30000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // --- HANDLERS ---
-  const triggerError = (msg: string) => {
-    setErrorMessage(msg);
-    setTimeout(() => setErrorMessage(null), 5000);
+  const handleReset = () => {
+    setFileData(null);
+    setFileName(null);
+    setTextContent("");
   };
 
-  const handleFileSelect = async (selectedFile: File) => {
-    if (!selectedFile.name.endsWith(".zip")) {
-        triggerError("Please upload a valid .zip file");
-        return;
-    }
-
-    setFile(selectedFile);
-    setStatus("UPLOADING");
-    setErrorMessage(null);
-
+  const handleUpload = async (file: File) => {
+    if (!file) return;
+    
+    setIsProcessing(true);
     try {
-        // 1. Upload & Extract
-        const zipData = await api.importZip(selectedFile);
-        const extractedText = zipData.structure;
-        setStructureText(extractedText);
-
-        // 2. Analyze & Build Tree
-        setStatus("ANALYZING");
-        const previewData = await api.preview(extractedText);
+        setFileName(file.name);
+        const result = await importZip(file);
         
-        const treeRoot = buildTree(previewData.nodes);
-        setRootNode(treeRoot);
-        setSummary(previewData.summary || null);
-        setStatus("READY");
-        playSuccessSound();
+        setFileData(result.tree); 
+        setTextContent(result.text); 
 
-    } catch (error: any) {
-        console.error(error);
-        triggerError(error.message || "Failed to process ZIP file.");
-        setStatus("IDLE");
-        setFile(null);
+    } catch (error) {
+        console.error("Failed to process zip:", error);
+        alert("Error processing zip file. Please ensure the backend server is running.");
+        handleReset();
+    } finally {
+        setIsProcessing(false);
     }
-  };
-
-  const resetUpload = () => {
-    setFile(null);
-    setStructureText("");
-    setRootNode(null);
-    setStatus("IDLE");
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-50 dark:bg-zinc-950 transition-colors duration-700 ease-in-out">
-      <AuroraBackground />
-      <SystemStatus isOnline={isBackendOnline} />
-      <ErrorToast message={errorMessage} onClose={() => setErrorMessage(null)} />
-
-      <div className="relative z-10 pt-24 pb-20 px-6 max-w-[1600px] mx-auto">
+    <ReactFlowProvider>
+      <div className="relative min-h-[calc(100vh-80px)] w-full bg-slate-50 dark:bg-slate-950 transition-colors duration-700">
         
-        {/* HEADER */}
-        <div className="mb-12">
-            <motion.h1 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-5xl md:text-6xl font-black tracking-tight text-foreground mb-4"
-            >
-              ZIP <span className="text-indigo-500">→</span> Directory
-            </motion.h1>
-            <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="text-xl text-muted-foreground font-light max-w-2xl"
-            >
-              Upload a project archive to instantly generate its architecture tree.
-            </motion.p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:h-[750px]">
+        {/* BACKGROUND */}
+        <AuroraBackground />
+        
+        {/* CONTENT */}
+        <div className="relative z-10 p-6 font-sans text-slate-800 dark:text-slate-200">
           
-          {/* LEFT COLUMN: Upload / Preview */}
-          <motion.div 
-            initial={{ x: -30, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="flex flex-col h-full bg-card/60 backdrop-blur-xl border border-white/10 dark:border-white/5 rounded-3xl shadow-xl overflow-hidden relative"
-          >
-             {status === "IDLE" || status === "UPLOADING" ? (
-                 <ZipUploadZone status={status} onFileSelect={handleFileSelect} />
-             ) : (
-                 <StructurePreview 
-                    fileName={file?.name || "archive.zip"} 
-                    text={structureText} 
-                    onReset={resetUpload}
-                    onError={triggerError}
-                 />
-             )}
-          </motion.div>
+          {/* HEADER */}
+          <header className="max-w-7xl mx-auto mb-8 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                Zip <span className="text-slate-400">→</span> Directory
+              </h1>
+              <ViewToggle mode={layoutMode} setMode={setLayoutMode} />
+            </div>
+          </header>
 
-          {/* RIGHT COLUMN: Visualization */}
-          <motion.div 
-            initial={{ x: 30, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="h-full"
-          >
-            <TreeVisualizer 
-                status={status} 
-                rootNode={rootNode} 
-                summary={summary}
-                fileName={file?.name || null}
-                onError={triggerError}
-            />
-          </motion.div>
+          {/* MAIN GRID */}
+          <main className={`max-w-7xl mx-auto grid gap-6 ${
+            layoutMode === 'horizontal' 
+              ? 'grid-cols-2 h-[80vh]' 
+              : 'grid-cols-1 auto-rows-min'
+          }`}>
+            
+            {/* INPUT SECTION */}
+            <section className={layoutMode === 'horizontal' ? 'h-full' : 'w-full'}>
+              <UploadBlock 
+                  mode={layoutMode} 
+                  fileName={fileName}
+                  textContent={textContent} 
+                  onUpload={handleUpload}
+                  onReset={handleReset}
+              />
+              {isProcessing && (
+                <p className="text-center mt-4 text-sm font-medium text-blue-500 animate-pulse">
+                  Processing zip structure...
+                </p>
+              )}
+            </section>
+
+            {/* PREVIEW SECTION */}
+            <section className={`flex flex-col gap-6 ${layoutMode === 'horizontal' ? 'h-full overflow-y-auto' : ''}`}>
+              
+              {/* FILE EXPLORER: NO OUTER WRAPPER NOW! */}
+              {fileData && (
+                 <FileExplorer data={fileData} />
+              )}
+
+              {/* MIND MAP (Vertical Only) */}
+              {fileData && layoutMode === 'vertical' && (
+                  <div className="flex flex-col gap-2 mt-4">
+                      <h3 className="font-semibold text-slate-700 px-1 dark:text-slate-200">
+                        Visual Map
+                      </h3>
+                      <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden h-[500px] transition-colors">
+                        <MindMap data={fileData} />
+                      </div>
+                  </div>
+              )}
+
+            </section>
+
+          </main>
         </div>
       </div>
-    </div>
+    </ReactFlowProvider>
   );
-}
+};
+
+export default ZipToDirectoryPage;

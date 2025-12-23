@@ -98,7 +98,7 @@ export function Header() {
                                             <h4 className="text-sm font-semibold leading-none text-muted-foreground mb-2 px-2">Actions</h4>
                                             <ul className="space-y-1">
                                                 <ListItem title="Convert Text → Directory" href="/actions/text-to-dir" icon={FolderTree} description="Generate folder structures" />
-                                                <ListItem title="ZIP → Tree" href="#" icon={FileArchive} description="Visualize zip contents" />
+                                                <ListItem title="ZIP → Tree" href="/actions/zip-to-dir" icon={FileArchive} description="Visualize zip contents" />
                                             </ul>
                                         </div>
                                         <div className="flex flex-col gap-2 border-l pl-4 border-border">
