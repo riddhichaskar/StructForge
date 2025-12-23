@@ -6,8 +6,10 @@ src/dirgen_core/manifest.py
 src/dirgen_core/models.py
 src/dirgen_core/parser.py
 src/dirgen_core/previewer.py
+src/dirgen_core/report.py
 src/dirgen_core/templates.py
 src/dirgen_core/validator.py
+src/dirgen_core/zip_parser.py
 src/dirgen_core/zip_utils.py
 src/dirgen_core.egg-info/PKG-INFO
 src/dirgen_core.egg-info/SOURCES.txt

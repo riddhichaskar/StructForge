@@ -21,3 +21,4 @@ class Manifest:
     destination: Path
     created: List[Path] = field(default_factory=list)
     timestamp: datetime = field(default_factory=datetime.utcnow)
+

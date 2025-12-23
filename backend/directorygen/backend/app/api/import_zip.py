@@ -1,39 +1,50 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Request
 from fastapi.responses import JSONResponse
 
-from dirgen_core.zip_utils import extract_structure_from_zip
+from app.utils.security import limiter
 from app.config import settings
 
-router = APIRouter(prefix="/import-zip", tags=["Import"])
+from dirgen_core.zip_parser import parse_zip_to_nodes
+from dirgen_core.report import ParseReport
+from dirgen_core.builder import nodes_to_ascii
+
+router = APIRouter(prefix="/import-zip", tags=["Import ZIP"])
 
 
 @router.post("")
 @limiter.limit("5/minute")
-async def import_zip(file: UploadFile = File(...)):
+async def import_zip(request: Request, file: UploadFile = File(...)):
     if not file.filename.endswith(".zip"):
-        raise HTTPException(status_code=400, detail="Only ZIP files are allowed")
+        raise HTTPException(status_code=400, detail="Only ZIP files allowed")
 
     content = await file.read()
-
     size_mb = len(content) / (1024 * 1024)
+
     if size_mb > settings.MAX_ZIP_SIZE_MB:
         raise HTTPException(
             status_code=413,
-            detail=f"ZIP exceeds max size of {settings.MAX_ZIP_SIZE_MB} MB",
+            detail="ZIP too large"
         )
 
     try:
-        structure_text = extract_structure_from_zip(
-            content,
-            max_nodes=settings.MAX_NODES,
-            max_depth=settings.MAX_DEPTH,
-        )
+        report = ParseReport()
+        nodes = parse_zip_to_nodes(content)
 
-        return JSONResponse(
-            {
-                "structure": structure_text
-            }
-        )
+        ascii_tree = nodes_to_ascii(nodes, root_name=file.filename)
+
+        report.add_fix("Parsed ZIP structure on backend")
+
+        return JSONResponse({
+            "nodes": [
+                {
+                    "name": n.name,
+                    "is_dir": n.is_dir,
+                    "depth": n.depth
+                } for n in nodes
+            ],
+            "text": ascii_tree,
+            "summary": report.to_dict()
+        })
 
     except Exception as e:
         raise HTTPException(status_code=422, detail=str(e))
