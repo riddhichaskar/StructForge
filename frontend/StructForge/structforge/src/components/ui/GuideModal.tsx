@@ -1,4 +1,4 @@
-import { X, ChevronRight, ChevronLeft, HelpCircle } from 'lucide-react';
+import { ChevronRight, HelpCircle } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
