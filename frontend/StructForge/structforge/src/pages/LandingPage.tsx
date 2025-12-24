@@ -44,7 +44,7 @@ export default function LandingPage() {
         // Option 2: The Subheading
         subheading="The ultimate bridge between documentation and development. Turn your tree command outputs into clear, shareable, and usable project maps."
       >
-          {/* SCROLLABLE CONTENT SECTIONS */}
+          {/* SCROLLABLE CONTENT SECTIONS 
           <div className="space-y-24 py-20 text-foreground">
               
               <section className="h-[500px] bg-black/5 dark:bg-white/10 rounded-2xl p-10 border border-black/10 dark:border-white/20 backdrop-blur-md transition-all hover:border-black/20 dark:hover:border-white/30">
@@ -71,7 +71,7 @@ export default function LandingPage() {
                   </p>
               </section>
 
-          </div>
+          </div>*/}
       </HeroGeometric>
     </div>
   );
