@@ -18,10 +18,11 @@ import { AuroraBackground } from "@/components/background/AuroraBackground";
 import { AnimatedSparkle } from "@/components/ui/AnimatedSparkle";
 import { TypewriterLoader } from "@/components/ui/TypewriterLoader";
 import { DownloadToast } from "@/components/ui/DownloadToast";
-import { ErrorToast } from "@/components/ui/ErrorToast"; // <--- NEW IMPORT
+import { ErrorToast } from "@/components/ui/ErrorToast"; 
 import { RenameProjectModal } from "@/components/modals/RenameProjectModal";
 import { SystemStatus } from "@/components/ui/system-status";
 import { playSuccessSound, sendDesktopNotification } from "@/lib/sound-utils";
+import { TextToDirGuide } from '@/components/features/guides/TextToDirGuide';
 
 export default function TextToDirectoryPage() {
   // --- STATE MANAGEMENT ---
@@ -205,6 +206,7 @@ export default function TextToDirectoryPage() {
             >
               Text to Directory
             </motion.h1>
+            <TextToDirGuide />
             <motion.p 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

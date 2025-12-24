@@ -1,3 +1,4 @@
+//src/lib/api.ts
 const API_BASE = "/api";
 
 export interface TreeNode {
@@ -25,7 +26,7 @@ export interface PreviewResponse {
 }
 
 export const api = {
-  // 🟢 Health Check
+  // Health Check
   checkHealth: async (): Promise<boolean> => {
     try {
       const res = await fetch(`${API_BASE}/health`);
@@ -35,7 +36,7 @@ export const api = {
     }
   },
 
-  // 👀 Preview Structure
+  // Preview Structure
   // Maps to your preview.py: @router.post("")
   preview: async (structure: string): Promise<PreviewResponse> => {
     const res = await fetch(`${API_BASE}/preview`, {
@@ -53,7 +54,7 @@ export const api = {
     return res.json();
   },
 
-  // 📦 Generate ZIP
+  // Generate ZIP
   // Maps to your generate.py: class GenerateRequest(BaseModel)
   generate: async (structure: string, name: string): Promise<Blob> => {
     const res = await fetch(`${API_BASE}/generate`, {
