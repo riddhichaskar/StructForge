@@ -1,0 +1,28 @@
+          {/* SCROLLABLE CONTENT SECTIONS 
+          <div className="space-y-24 py-20 text-foreground">
+              
+              <section className="h-[500px] bg-black/5 dark:bg-white/10 rounded-2xl p-10 border border-black/10 dark:border-white/20 backdrop-blur-md transition-all hover:border-black/20 dark:hover:border-white/30">
+                  <h2 className="text-3xl font-bold">From Chaos to Clarity</h2>
+                  <p className="mt-4 text-muted-foreground text-lg leading-relaxed">
+                      Transform complex directory structures into intuitive visual maps. 
+                      Perfect for documentation, onboarding, and understanding legacy codebases.
+                  </p>
+              </section>
+              
+              <section className="h-[500px] bg-black/5 dark:bg-white/10 rounded-2xl p-10 border border-black/10 dark:border-white/20 backdrop-blur-md transition-all hover:border-black/20 dark:hover:border-white/30">
+                  <h2 className="text-3xl font-bold">Scaffold Instantly</h2>
+                  <p className="mt-4 text-muted-foreground text-lg leading-relaxed">
+                      Don't waste time creating folders manually. Type your structure in 
+                      simple text format and generate a ready-to-use ZIP file in seconds.
+                  </p>
+              </section>
+
+              <section className="h-[500px] bg-black/5 dark:bg-white/10 rounded-2xl p-10 border border-black/10 dark:border-white/20 backdrop-blur-md transition-all hover:border-black/20 dark:hover:border-white/30">
+                  <h2 className="text-3xl font-bold">Secure & Local</h2>
+                  <p className="mt-4 text-muted-foreground text-lg leading-relaxed">
+                      Your data never leaves your browser for processing. 
+                      Experience lightning-fast conversions with zero privacy concerns.
+                  </p>
+              </section>
+
+          </div>*/}
